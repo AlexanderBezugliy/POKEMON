@@ -1,95 +1,108 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+    'use client';
+import React, { useMemo, useState } from "react";
+import { useGetPokemonListQuery } from "../../redux/pokemonApi";
+import SearchForm from "@/components/SearchForm";
+import Filters from "@/components/Filters";
+import MainPokemonsList from "@/components/MainPokemonsList";
 
-export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+const Home = () => {
+    const [offset, setOffset] = useState(0);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [filters, setFilters] = useState({
+        type: "",
+        ability: "",
+        weight: "",
+        height: "",
+        sortOrder: "",
+    });
+    // Используем хук RTK Query для получения данных
+    // isFetching будет true при первом запросе и при каждом последующем (когда нажимаем "load more")
+    // isLoading будет true только при самом первом запросе
+    const { data: pokemonListDetails = [], isLoading, isFetching } = useGetPokemonListQuery({
+        limit: 12,
+        offset: offset,
+    });
+    // Функция для загрузки следующей страницы
+    // const loadMore = () => {
+    //     // Мы просто увеличиваем offset, а RTK Query сам сделает запрос и добавит данные в кеш
+    //     setOffset((prevOffset) => prevOffset + 40);
+    // };
+    // Обработчики для фильтров и поиска
+    const handleFilterChange = (key: string, value: string) => {
+        setFilters((prev) => ({ ...prev, [key]: value }));
+    };
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const clearFilters = () => {
+        setFilters({ type: "", ability: "", weight: "", height: "", sortOrder: "" });
+        setSearchQuery("");
+    };
+
+    // Мемоизируем фильтрацию и сортировку, чтобы они не пересчитывались при каждом рендере
+    const filteredAndSortedPokemon = useMemo(() => {
+        let filteredPokemon = [...pokemonListDetails];
+        const { type, ability, weight, height, sortOrder } = filters;
+        const query = searchQuery.toLowerCase();
+        // Поиск по имени
+        if (query) {
+            filteredPokemon = filteredPokemon.filter((pokemon) => pokemon.name.toLowerCase().includes(query));
+        }
+        // Фильтры
+        if (type) {
+            filteredPokemon = filteredPokemon.filter((p) => p.types.some((t: any) => t.type.name === type));
+        }
+        if (ability) {
+            filteredPokemon = filteredPokemon.filter((p) => p.abilities.some((a: any) => a.ability.name === ability));
+        }
+        if (weight) {
+            filteredPokemon = filteredPokemon.filter((p) => p.weight >= parseInt(weight, 10));
+        }
+        if (height) {
+            filteredPokemon = filteredPokemon.filter((p) => p.height >= parseInt(height, 10));
+        }
+        // Сортировка
+        if (sortOrder) {
+            filteredPokemon.sort((a, b) => {
+                return sortOrder === 'asc'
+                    ? a.name.localeCompare(b.name)
+                    : b.name.localeCompare(a.name);
+            });
+        }
+        
+        return filteredPokemon;
+    }, [pokemonListDetails, searchQuery, filters]);
+
+    return (
+        <main>
+            <section className="mt-10 flex items-center justify-center">
+                <SearchForm 
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                />
+            </section>
+
+            <section>
+                <Filters 
+                    filters={filters}
+                    onFilterChange={handleFilterChange}
+                    onClear={clearFilters}
+                />
+            </section>
+
+            <MainPokemonsList
+                filteredAndSortedPokemon={filteredAndSortedPokemon}
+                setOffset={setOffset}
+                isLoading={isLoading}
+                isFetching={isFetching}
+                pokemonListDetails={pokemonListDetails}
+
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
-}
+            
+        </main>
+    );
+};
+
+export default Home;
