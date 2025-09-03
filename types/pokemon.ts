@@ -28,8 +28,8 @@ export interface PokemonStat {
   
 //  Тип для спрайтов (изображений)
 export interface PokemonSprites {
-    front_default: string | null;
-    back_default: string | null;
+    front_default: string ;
+    back_default: string ;
     other: {
       home: {
         front_default: string | null;
@@ -43,8 +43,8 @@ export interface PokemonSprites {
   
 // CRYYYYYY
 export interface PokemonCries {
-    latest: string | null;
-    legacy: string | null;
+    latest: string;
+    legacy: string;
 }
   
 // POKEMON TYPE

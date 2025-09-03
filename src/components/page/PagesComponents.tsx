@@ -11,9 +11,9 @@ interface PagesComponentsProps {
 }
 const PagesComponents = ({ pokemonFS, title, isLoading }: PagesComponentsProps) => {
     return (
-        <div className="p-8">
+        <div className="pt-4">
             <div className="flex justify-center">
-                <h1 className="text-orange-500 text-4xl font-bold text-center px-6 py-4 bg-white rounded-2xl border-2 border-blue-500">
+                <h1 className="text-orange-500 text-xl 490px:text-4xl font-bold text-center px-6 py-4 bg-white rounded-2xl border-2 border-blue-500">
                     {title}
                 </h1>
             </div>
@@ -24,12 +24,12 @@ const PagesComponents = ({ pokemonFS, title, isLoading }: PagesComponentsProps) 
                     <div className="loader"></div> 
                 </div>
             ) : pokemonFS.length === 0 ? (
-                <div className="text-center text-gray-500 mt-20">
+                <div className="text-center text-2xl text-white font-bold mt-20">
                     <p className="text-2xl">Your favorites list is empty.</p>
                     <p>Click the heart icon on a Pokémon to add it here!</p>
                 </div>
             ) : (
-                <div className="px-8 py-8 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="px-4 py-4 490px:px-8 490px:py-8 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {pokemonFS.map((pokemon: Pokemon) => (
                         <PokemonCard
                             key={pokemon.id}

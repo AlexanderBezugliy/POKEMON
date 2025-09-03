@@ -4,6 +4,9 @@ import { useGetPokemonListQuery } from "../../redux/pokemonApi";
 import SearchForm from "@/components/SearchForm";
 import Filters from "@/components/Filters";
 import MainPokemonsList from "@/components/MainPokemonsList";
+import { PokemonAbility, PokemonType } from "../../types/pokemon";
+
+
 
 const Home = () => {
     const [offset, setOffset] = useState(0);
@@ -52,10 +55,10 @@ const Home = () => {
         }
         // Фильтры
         if (type) {
-            filteredPokemon = filteredPokemon.filter((p) => p.types.some((t: any) => t.type.name === type));
+            filteredPokemon = filteredPokemon.filter((p) => p.types.some((t: PokemonType) => t.type.name === type));
         }
         if (ability) {
-            filteredPokemon = filteredPokemon.filter((p) => p.abilities.some((a: any) => a.ability.name === ability));
+            filteredPokemon = filteredPokemon.filter((p) => p.abilities.some((a: PokemonAbility) => a.ability.name === ability));
         }
         if (weight) {
             filteredPokemon = filteredPokemon.filter((p) => p.weight >= parseInt(weight, 10));
@@ -77,7 +80,7 @@ const Home = () => {
 
     return (
         <main>
-            <section className="mt-10 flex items-center justify-center">
+            <section className="mt-4 490px:mt-10 flex items-center justify-center">
                 <SearchForm 
                     value={searchQuery}
                     onChange={handleSearchChange}

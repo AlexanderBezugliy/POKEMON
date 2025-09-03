@@ -11,7 +11,13 @@ module.exports = {
     theme: {
     	extend: {
             backgroundImage: {
-                bgMain: "url('/Main_BG.webp')", 
+                bgMain: 'linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url("/Main_BG.webp")'
+            },
+            screens: {
+                '1120px': '1120px',
+                '940px': '920px',
+                '540px': '540px',
+                '490px': '490px',
             },
     		colors: {
     			background: 'hsl(var(--background))',

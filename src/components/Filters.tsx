@@ -51,8 +51,8 @@ const pokemonAbilities = [
 
 const Filters = ({ filters, onFilterChange, onClear }: FiltersProps) => {
     return (
-        <div className="mt-8 px-16 py-4 flex items-center justify-between">
-            <div className="flex flex-wrap gap-4 items-center">
+        <div className="mt-2 px-16 py-4 flex flex-col items-center 490px:mt-8 490px:flex-row 490px:items-center justify-between">
+            <div className="flex flex-wrap gap-4 items-center justify-center 490px:justify-start">
                 {/* TYPES */}
                 <Select
                     value={filters.type}
@@ -141,7 +141,7 @@ const Filters = ({ filters, onFilterChange, onClear }: FiltersProps) => {
             {/* CLEAR button */}
             <Button
                 onClick={onClear}
-                className="u-shadow-2 font-bold bg-[#6c5ce7] rounded-lg flex items-center gap-1"
+                className="u-shadow-2 font-bold bg-[#6c5ce7] rounded-lg flex items-center gap-1 mt-4 490px:mt-0 "
             >
                 <Delete className="mr-2 h-5 w-5" />Clear Filters
             </Button>

@@ -1,4 +1,4 @@
-"use client";
+    "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useMemo } from "react";
@@ -9,32 +9,26 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { toggleFavorite, toggleSaved } from "../../redux/slice/PokemonsSlice";
 import { Bookmark, Heart, Ruler, Weight } from "lucide-react";
 import { Pokemon, PokemonType } from "../../types/pokemon";
-import Link from "next/link";
+
+
 
 interface PokemonCardProps {
     pokemon: Pokemon;
 }
 const PokemonCard = ({ pokemon }: PokemonCardProps) => {
     const router = useRouter();
-    // 2. Получаем dispatch для отправки экшенов
     const dispatch = useDispatch<AppDispatch>();
-    // 3. Получаем списки из Redux store с помощью useSelector
-    const { favorites, saved } = useSelector(
-        (state: RootState) => state.pokemonListsSlice
-    );
-    // 4. Проверяем, есть ли текущий покемон в списках (используем useMemo для оптимизации)
+    const { favorites, saved } = useSelector((state: RootState) => state.pokemonListsSlice);
+
+    //Проверяем, есть ли текущий покемон в списках (используем useMemo для оптимизации)
     const isLiked = useMemo(
         () => favorites.some((p) => p.id === pokemon.id),
         [favorites, pokemon.id]
     );
-
     const isBookmarked = useMemo(
         () => saved.some((p) => p.id === pokemon.id),
         [saved, pokemon.id]
     );
-
-    const handleLikeClick = () => dispatch(toggleFavorite(pokemon));
-    const handleBookmarkClick = () => dispatch(toggleSaved(pokemon));
 
     return (
         <div className="group relative block">
@@ -45,7 +39,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
                     <div className="flex gap-4 bg-white rounded-tl-xl rounded-tr-xl">
                         <button
                             className="bg-gray-200 p-2 w-10 h-10 text-xl flex items-center justify-center rounded-full border-2 hover:bg-[#00b894] hover:border-transparent hover:text-white transition-all duration-300 ease-in-out"
-                            onClick={handleLikeClick}
+                            onClick={() => dispatch(toggleFavorite(pokemon))}
                         >
                             <Heart
                                 fill={isLiked ? "red" : "none"}
@@ -55,7 +49,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
                         </button>
                         <button
                             className="bg-gray-200 p-2 w-10 h-10 text-xl flex items-center justify-center rounded-full border-2 hover:bg-[#00b894] hover:border-transparent hover:text-white transition-all duration-300 ease-in-out"
-                            onClick={handleBookmarkClick}
+                            onClick={() => dispatch(toggleSaved(pokemon))}
                         >
                             <Bookmark
                                 fill={isBookmarked ? "blue" : "none"}
@@ -73,16 +67,13 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
                     </button>
                 </div>
 
-                <div className="flex gap-4">
-                    <div className="flex-1">
+                <div className="flex gap-0 490px:gap-2 ">
+                    <div>
                         <Image
-                            src={
-                                pokemon?.sprites?.other?.home?.front_default ||
-                                pokemon?.sprites?.front_default
-                            }
+                            src={pokemon?.sprites?.other?.home?.front_default || pokemon?.sprites?.front_default}
                             alt="pokemon image"
-                            width={200}
-                            height={200}
+                            width={150}
+                            height={150}
                             className="object-contain"
                             priority
                         />
@@ -117,8 +108,7 @@ const PokemonCard = ({ pokemon }: PokemonCardProps) => {
                                         key={index}
                                         className="text-xs uppercase font-semibold text-white px-5 py-1 rounded-full"
                                         style={{
-                                            backgroundColor:
-                                                typeColor[type?.type?.name],
+                                            backgroundColor: typeColor[type?.type?.name],
                                         }}
                                     >
                                         {type.type.name}

@@ -44,7 +44,7 @@ export default function RootLayout({
                 <StoreProvider>
 
                     <UserDataLoader /> 
-                    <body className={`bg-bgMain bg-center ${geistSans.variable} ${geistMono.variable}`}>
+                    <body className={`bg-bgMain bg-darken bg-center ${geistSans.variable} ${geistMono.variable}`}>
                         <Header />
                         {children}
                     </body>

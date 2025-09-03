@@ -14,8 +14,6 @@ interface Props {
     pokemonListDetails: Pokemon[];
 }
 const MainPokemonsList = ({ filteredAndSortedPokemon, setOffset, isFetching, isLoading, pokemonListDetails }: Props) => {
-
-    // Функция для загрузки следующей страницы
     const loadMore = () => {
         // увеличиваем offset RTK Query сам сделает запрос и добавит данные в кеш
         setOffset((prevOffset: number) => prevOffset + 40);
@@ -24,7 +22,7 @@ const MainPokemonsList = ({ filteredAndSortedPokemon, setOffset, isFetching, isL
     return (
         <section>
             <div className="min-h-[91vh]">
-                <div className="px-16 py-8 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div className="px-4 py-0 490px:px-16 490px:py-8 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                     {filteredAndSortedPokemon.map((pokemon: Pokemon) => (
                         <PokemonCard 
                             key={pokemon.name} 
@@ -45,6 +43,7 @@ const MainPokemonsList = ({ filteredAndSortedPokemon, setOffset, isFetching, isL
                         <span className="text-left">
                             {arrowAngleDown}
                         </span>
+                        
                         {isFetching ? "Загружается..." : "Загрузить еще"}
                     </button>
                 </div>
