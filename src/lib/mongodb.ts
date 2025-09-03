@@ -12,7 +12,7 @@ let clientPromise: Promise<MongoClient>;
 if (process.env.NODE_ENV === 'development') {
     // В режиме разработки используем глобальную переменную,
     // чтобы не создавать новое подключение при каждом Hot Reload.
-    let globalWithMongo = global as typeof globalThis & { _mongoClientPromise?: Promise<MongoClient> };
+    const globalWithMongo = global as typeof globalThis & { _mongoClientPromise?: Promise<MongoClient> };
     if (!globalWithMongo._mongoClientPromise) {
         client = new MongoClient(uri);
         globalWithMongo._mongoClientPromise = client.connect();

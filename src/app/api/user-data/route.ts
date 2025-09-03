@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 // Название коллекции, где будут храниться данные
 const collectionName = 'pokemonUserData';
 
-export async function GET(request: Request) {
+export async function GET() {
     const session = await getSession();//функция от Auth0 проверяет вошел ли пользователь в систему и получает информацию о нём
     const user = session?.user;
 
@@ -27,7 +27,7 @@ export async function GET(request: Request) {
         }
         
         return NextResponse.json({ favorites: userData.favorites, saved: userData.saved });// Возвращаем только нужные поля
-    } catch (error) {
+    } catch {
         return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
     }
 }
@@ -55,7 +55,7 @@ export async function POST(request: Request) {
         );
         // console.log(`[POST] Сохранены данные для пользователя ${user.sub}`);
         return NextResponse.json({ success: true });
-    } catch (error) {
+    } catch {
         // console.error('Ошибка при сохранении данных:', error);
         return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
     }

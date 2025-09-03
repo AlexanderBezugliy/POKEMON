@@ -1,5 +1,5 @@
     'use client';
-import React from "react";
+import React, { useState } from "react";
 import { Pokemon } from "../../types/pokemon";
 import PokemonCard from "./PokemonCard";
 import { arrowAngleDown } from "../../utils/icons";
@@ -8,15 +8,21 @@ import { arrowAngleDown } from "../../utils/icons";
 
 interface Props {
     filteredAndSortedPokemon: Pokemon[];
-    setOffset: React.Dispatch<React.SetStateAction<number>>;
+    // setOffset: React.Dispatch<React.SetStateAction<number>>;
     isLoading: boolean;
     isFetching: boolean;
-    pokemonListDetails: Pokemon[];
+    allPokemonData: Pokemon[];
 }
-const MainPokemonsList = ({ filteredAndSortedPokemon, setOffset, isFetching, isLoading, pokemonListDetails }: Props) => {
+const MainPokemonsList = ({ filteredAndSortedPokemon, isFetching, isLoading, allPokemonData }: Props) => {
+    const [displayCount, setDisplayCount] = useState(12);
+
+    // const loadMore = () => {
+    //     // увеличиваем offset RTK Query сам сделает запрос и добавит данные в кеш
+    //     setOffset((prevOffset: number) => prevOffset + 40);
+    // };
+
     const loadMore = () => {
-        // увеличиваем offset RTK Query сам сделает запрос и добавит данные в кеш
-        setOffset((prevOffset: number) => prevOffset + 40);
+        setDisplayCount(prevCount => prevCount + 12);
     };
 
     return (
@@ -32,7 +38,7 @@ const MainPokemonsList = ({ filteredAndSortedPokemon, setOffset, isFetching, isL
                 </div>
             </div>
 
-            {!isLoading && pokemonListDetails.length > 0 && (
+            {!isLoading && displayCount < filteredAndSortedPokemon.length && (
                 <div className="mt-4 mb-10 flex items-center justify-center">
                     <button
                         onClick={loadMore}
